@@ -1,0 +1,134 @@
+ /* src/styles/layout.css */
+
+/* Dashboard layout */
+.dashboard-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Fixed header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 60px;
+  background-color: #111827;
+  color: white;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background-color: #f97316;
+  font-weight: 700;
+  color: #111827;
+}
+
+.site-name {
+  font-weight: 600;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.link-button {
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  padding: 0.25rem 0.5rem;
+}
+
+.link-button:hover {
+  color: white;
+}
+
+.icon-button {
+  border: none;
+  background: transparent;
+  color: #fca5a5;
+  padding: 0.25rem 0.5rem;
+}
+
+.icon-button:hover {
+  color: #fecaca;
+}
+
+/* Body area */
+.dashboard-body {
+  flex: 1;
+  display: flex;
+  min-height: 0; /* For proper flexbox scrolling */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: #1f2933;
+  color: #e5e7eb;
+  padding: 1rem 0.75rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-link {
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  color: #e5e7eb;
+}
+
+.sidebar-link:hover {
+  background-color: #111827;
+}
+
+.sidebar-link.active {
+  background-color: #2563eb;
+  color: white;
+}
+
+/* Main content area */
+.dashboard-main {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background-color: #f3f4f6;
+}
+
+/* Responsive: collapse sidebar on small screens if needed */
+@media (max-width: 768px) {
+  .dashboard-body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+  }
+
+  .dashboard-main {
+    padding: 1rem;
+  }
+}
