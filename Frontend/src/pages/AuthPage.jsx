@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/authpage.css';
+import '../API/api.js';
+import { postData } from '../API/api.js';
+
+const passwordConfirm =document.getElementById("passwordConfirm");
+const password = document.getElementById("password");
+const email = document.getElementById("email");
+const authForm = document.getElementById("auth-form");
 
 const AuthPage = () => {
   const [mode, setMode] = useState('login');
@@ -12,34 +19,64 @@ const AuthPage = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const formData = new FormData();
+     
+    formData.append("email", email);
+    formData.append("password", password);
+    
     if (mode === 'login') {
-      // Login logic here
-      console.log('Login submitted!');
-      console.log('Email:', email);
-      console.log('Password:', password);
+      const action = 'login';
+      formData.append("login", action);
+      const data = await postData('login', formData);
+      if (data.success === true) {
+       
+        navigate("/mode-selection");
+      }
+      else {
+        //showMessageBox('Login failed', data.message || 'Login failed. Please try again.');
+        alert(data.message || 'Login failed. Please try again.');
+      }
 
       // Navigate to mode selection page
-      navigate('/mode-selection');
+      
 
     } else {
       // Signup logic here
+      authForm.reset();
+      alert(email+password+confirmPassword);
 
-      // Check if passwords match
-      if (password !== confirmPassword) {
-        alert('Passwords do not match!');
+      if (!email || !password || !confirmPassword) {
+        alert('Please fill in all fields!');
         return;
       }
-
-      console.log('Sign up submitted!');
-      console.log('Email:', email);
-      console.log('Password:', password);
-
-      // Navigate to mode selection page
-      navigate('/mode-selection');
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        alert('Please enter a valid email address!');
+        return;
+      }
+        if (password !== confirmPassword) {
+          alert("Passwords do not match!");
+          return;
+        } else if (password.length < 8) {
+          alert("Password must be at least 8 characters long!");
+          return;
+        } else {
+          const action = "register";
+          formData.append("register", action);
+          const data = await postData("register", formData);
+          if (data.success === true) {
+            //showMessageBox('Signup successful', data.message || 'Account created successfully! You can now log in.');
+            alert(data.message || "Account created successfully! You can now log in.");
+            authForm.reset();
+            setMode('login');
+          } else {
+            //showMessageBox('Signup failed', data.message || 'Signup failed. Please try again.');
+            alert(data.message || "Signup failed. Please try again.");
+          }
+        }
     }
+    
   };
 
   const togglePassword = () => {
@@ -71,7 +108,7 @@ const AuthPage = () => {
         </div>
 
         {/* Form */}
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form className="auth-form" onSubmit={handleSubmit} id='auth-form'>
           
           <div className="form-group">
             <label>Email</label>
@@ -79,6 +116,7 @@ const AuthPage = () => {
               type="email"
               placeholder="you@example.com"
               value={email}
+              id='email'
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -92,6 +130,7 @@ const AuthPage = () => {
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                id='password'
                 required
               />
               <button
@@ -147,6 +186,7 @@ const AuthPage = () => {
                   placeholder="Confirm password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  id='passwordConfirm'
                   required
                 />
                 <button
